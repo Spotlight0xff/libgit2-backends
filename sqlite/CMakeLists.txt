@@ -15,5 +15,8 @@ ENDIF ()
 
 # Compile and link LIBGIT2
 INCLUDE_DIRECTORIES(${LIBGIT2_INCLUDE_DIRS} ${SQLITE3_INCLUDE_DIRS})
-ADD_LIBRARY(git2-sqlite sqlite.c)
+ADD_LIBRARY(git2-sqlite sqlite_odb_backend.c sqlite_refdb_backend.c vector.c pool.c)
+
+# we need to prevent the linker from exporting git_pool_* and git_vector_*
+SET_SOURCE_FILES_PROPERTIES(vector.c pool.c PROPERTIES COMPILE_FLAGS -fvisibility=hidden)
 TARGET_LINK_LIBRARIES(git2-sqlite ${LIBGIT2_LIBRARIES} ${SQLITE3_LIBRARIES})
