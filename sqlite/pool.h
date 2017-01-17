@@ -32,8 +32,6 @@ typedef struct {
   uint32_t page_size;  /* size of page in bytes */
 } git_pool;
 
-#define GIT_POOL_INIT { NULL, 0, 0 }
-
 /**
  * Initialize a pool.
  *
@@ -72,35 +70,5 @@ extern void git_pool_clear(git_pool *pool);
 #	define GIT_ALIGN(x, size) x
 #endif
 
-/** Support for gcc/clang __has_builtin intrinsic */
-#ifndef __has_builtin
-# define __has_builtin(x) 0
-#endif
 
-#if (SIZE_MAX == UINT_MAX) && __has_builtin(__builtin_uadd_overflow)
-# define git__add_sizet_overflow(out, one, two) \
-  __builtin_uadd_overflow(one, two, out)
-# define git__multiply_sizet_overflow(out, one, two) \
-  __builtin_umul_overflow(one, two, out)
-#elif (SIZE_MAX == ULONG_MAX) && __has_builtin(__builtin_uaddl_overflow)
-# define git__add_sizet_overflow(out, one, two) \
-  __builtin_uaddl_overflow(one, two, out)
-# define git__multiply_sizet_overflow(out, one, two) \
-  __builtin_umull_overflow(one, two, out)
-#else
-/**
- * Sets `one + two` into `out`, unless the arithmetic would overflow.
- * @return true if the result fits in a `size_t`, false on overflow.
- */
-inline bool git__add_sizet_overflow(size_t *out, size_t one, size_t two)
-{
-  if (SIZE_MAX - one < two)
-    return true;
-  *out = one + two;
-  return false;
-}
-
-#endif
-#define git__malloc(len) git__crtdbg__malloc(len, __FILE__, __LINE__)
-#define GIT_ADD_SIZET_OVERFLOW(out, one, two) (git__add_sizet_overflow(out, one, two) ? -1 : 0)
 #endif
