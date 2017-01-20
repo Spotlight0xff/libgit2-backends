@@ -20,3 +20,5 @@ ADD_LIBRARY(git2-sqlite sqlite_odb_backend.c sqlite_refdb_backend.c vector.c poo
 # we need to prevent the linker from exporting git_pool_* and git_vector_*
 SET_SOURCE_FILES_PROPERTIES(vector.c pool.c PROPERTIES COMPILE_FLAGS -fvisibility=hidden)
 TARGET_LINK_LIBRARIES(git2-sqlite ${LIBGIT2_LIBRARIES} ${SQLITE3_LIBRARIES})
+
+ADD_EXECUTABLE(test_refdb ./tests/test_refdb_sqlite.c)
