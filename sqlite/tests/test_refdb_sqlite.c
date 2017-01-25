@@ -19,9 +19,31 @@ int main(int argc, char** argv) {
   // create fixtur
   git_libgit2_init();
   result = git_repository_init(&m_repo, path, 0 /* no bare */);
+  if (result) {
+    fprintf(stderr, "Error initializing the repository\n");
+    return EXIT_FAILURE;
+  }
   result = git_refdb_new(&ref_db, m_repo);
+  if (result) {
+    fprintf(stderr, "Error creating a new refdb\n");
+    return EXIT_FAILURE;
+  }
   result = git_refdb_backend_sqlite(&ref_backend, m_repo, file);
+  if (result) {
+    fprintf(stderr, "Error creating sqlite refdb backend\n");
+    return EXIT_FAILURE;
+  }
   git_repository_set_refdb(m_repo, ref_db);
+  git_refdb_free(ref_db);
+  if (ref_db == NULL) {
+    fprintf(stderr, "refdb is NULL.\n");
+    return EXIT_FAILURE;
+  }
+
+  if (giterr_last()) {
+    fprintf(stderr, "Error: %s\n", giterr_last()->message);
+    return EXIT_FAILURE;
+  }
 
 
 
@@ -39,13 +61,16 @@ error = git_reference_create(&ref, m_repo,
 
 git_reference_iterator *iter = NULL;
 error = git_reference_iterator_glob_new(&iter, m_repo, "refs/heads/*");
+if (error) {
+  printf("Error creating reference iterator\n");
+  return EXIT_FAILURE;
+}
 const char* name = NULL;
 while (! (error = git_reference_next_name(&name, iter))) {
   printf("iterator at %s\n", name);
 }
 
 git_reference_iterator_free(iter);
-  git_refdb_free(ref_db);
 
   return EXIT_SUCCESS;
 }
