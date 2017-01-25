@@ -4,7 +4,7 @@
 #define MIN_ALLOCSIZE 8
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
-inline size_t compute_new_size(git_vector *v)
+static inline size_t compute_new_size(git_vector *v)
 {
   size_t new_size = v->_alloc_size;
 
@@ -20,7 +20,7 @@ inline size_t compute_new_size(git_vector *v)
   return new_size;
 }
 
-inline int resize_vector(git_vector *v, size_t new_size)
+static inline int resize_vector(git_vector *v, size_t new_size)
 {
   void *new_contents;
 

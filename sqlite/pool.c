@@ -28,7 +28,7 @@ uint32_t git_pool__system_page_size(void)
   return size;
 }
 
-inline void* git__crtdbg__malloc(size_t len, const char *file, int line)
+static inline void* git__crtdbg__malloc(size_t len, const char *file, int line)
 {
   (void) file, (void) line;
   //void *ptr = _malloc_dbg(len, _NORMAL_BLOCK, file, line);

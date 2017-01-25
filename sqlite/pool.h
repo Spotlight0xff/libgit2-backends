@@ -92,7 +92,7 @@ extern void git_pool_clear(git_pool *pool);
  * Sets `one + two` into `out`, unless the arithmetic would overflow.
  * @return true if the result fits in a `size_t`, false on overflow.
  */
-inline bool git__add_sizet_overflow(size_t *out, size_t one, size_t two)
+static inline bool git__add_sizet_overflow(size_t *out, size_t one, size_t two)
 {
   if (SIZE_MAX - one < two)
     return true;

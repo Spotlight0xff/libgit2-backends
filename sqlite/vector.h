@@ -28,7 +28,7 @@ void git_vector_free(git_vector *v);
 
 void* git_vector_get(const git_vector *v, size_t position);
 
-inline bool git__multiply_sizet_overflow(size_t *out, size_t one, size_t two)
+static inline bool git__multiply_sizet_overflow(size_t *out, size_t one, size_t two)
 {
   if (one && SIZE_MAX / one < two)
     return true;
@@ -36,7 +36,7 @@ inline bool git__multiply_sizet_overflow(size_t *out, size_t one, size_t two)
   return false;
 }
 
-inline void* git__reallocarray(void *ptr, size_t nelem, size_t elsize)
+static inline void* git__reallocarray(void *ptr, size_t nelem, size_t elsize)
 {
   size_t newsize;
   return git__multiply_sizet_overflow(&newsize, nelem, elsize) ?
